@@ -3,7 +3,10 @@ version: 2.1
 
 jobs:
   test:
+    # Call bash as interactive login shell to make sure nvm is loaded through .bashrc
+    shell: /bin/bash -ileo pipefail
     docker:
+      
       - image: circleci/ruby:2.6.2-stretch-browsers-legacy
         environment:
            NODE_VERSION: 7.8.0
