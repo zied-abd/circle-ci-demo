@@ -5,10 +5,16 @@ jobs:
   test:
     docker:
       - image: circleci/ruby:2.6.2-stretch-browsers-legacy
+        environment:
+          RAILS_ENV: test
     steps:
+      - checkout
       - run:
-          name: echoing
-          command: ruby -v 
+          name: Install Ruby Dependencies
+          command: gem install bundler && bundle install
+      - run:
+          name: Run Tests
+          command: rails test
 
 workflows:
   version: 2
