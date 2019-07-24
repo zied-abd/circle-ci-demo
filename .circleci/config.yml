@@ -3,14 +3,9 @@ version: 2.1
 
 jobs:
   test:
-    # Call bash as interactive login shell to make sure nvm is loaded through .bashrc
-    shell: /bin/bash -ileo pipefail
     docker:
-      
-      - image: circleci/ruby:2.6.2-stretch-browsers-legacy
+      - image: circleci/ruby:2.6.2
         environment:
-           NODE_VERSION: 7.8.0
-           NODE_ENV: test
            RAILS_ENV: test
            RACK_ENV: test
            BUNDLE_PATH: vendor/bundle
@@ -18,19 +13,22 @@ jobs:
            BUNDLE_RETRY: 3
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - bundler-cache-v4-{{ checksum "Gemfile.lock" }}
+            - bundler-cache-v4-
       - run:
           name: Install Ruby Dependencies
-          command: gem install bundler && bundle install
-      - run:
-          name: install system deps
-          command: script/node_install.sh
-      - run:
-          name: npm install
-          command: npm install
+          command: bundle install
           
+      - save_cache:
+          key: bundler-cache-v4-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+            - ~/.bundle
       - run:
           name: Run Tests
-          command: rails test
+          command: bin/rails test
 
 workflows:
   version: 2
