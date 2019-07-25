@@ -48,7 +48,7 @@ workflows:
           application-name: myApplication
           deployment-group: myDeploymentGroup
           service-role-arn: myDeploymentGroupRoleARN
-          bundle-bucket: myApplicationS3Bucket
+          bundle-bucket: myapplications3bucket
           bundle-key: myS3BucketKey
           requires:
             - test
